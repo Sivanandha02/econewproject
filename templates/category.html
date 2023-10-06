@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155}}
+    {% else %}
+        Welcome to ecomm where you can buy anything..
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{category.name}} - ecomm store
+    {% else %}
+        see our new collections - ecomm store
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+    {% if category %}
+    <div>
+        <div class="row my_row">
+            <div class="mx_auto">
+
+            <p><a href="{% url 'ecommerceapp:allProductCat' %}">Our product collection</a></p>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+<div class="mx_auto">
+    {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+<br>
+<div>
+        <h1 class="text-center my_name">{{category.name}}</h1>
+        <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+    <div>
+        <img class="my_image my_image_padding" src="{% static 'img/banner4.png' %}" alt="ourproduct" width="100%" height="500">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_name">our product collections</h1>
+        <p class="text-justify">During the shopping process, Amazon’s AI offers suggestions of items that it predicts you will want to buy. The AI does a reasonable job. However, it is far from perfect. In our case, the AI accurately predicts what we want to buy about 5 percent of the time. We actually purchase about one of every twenty items it recommends. Considering the millions of items on offer, that’s not bad. Cotton Kurtis Designs - Buy Ladies Cotton Kurtis online at lowest prices on ... Women Printed Pure Cotton Straight Kurta</p>
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="row mx_auto">
+            {% for product in products.object_list %}
+            <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+                <div class="card text-center" style="">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image img-fluid" src="{{product.image.url}}" alt="{{product.name}}"></a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+            {% endfor %}
+            <div class="mx_auto">
+                {% if products.paginator.num_pages > 1 %}
+                <hr>
+                <div class="text-center">
+                    {% for pg in products.paginator.page_range %}
+                    <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+    </div>
+
+</div>
+{% endblock %}
